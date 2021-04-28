@@ -1,5 +1,7 @@
 #ifndef CNF_BUILDER_H
 #define CNF_BUILDER_H
+#include <iterator>
+#include <set>
 #include <sstream>
 #include <string>
 
@@ -9,10 +11,9 @@ class signal {
    public:
     static int var_cnt;
     int var;
-    string cnf;
+    set<string> cnf;
 
     signal();
-    // signal(bool create_var);
     void set_zero();
     void set_one();
     signal operator~();
@@ -20,5 +21,6 @@ class signal {
     signal operator&(signal signal_b);
     signal operator^(signal signal_b);
     void print();
+    // void sat_solve();
 };
 #endif
