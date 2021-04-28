@@ -9,13 +9,13 @@ signal::signal() {
     cnf = "";
 }
 
-signal signal::set_zero() {
+void signal::set_zero() {
     ostringstream ss;
     ss << cnf << "(" << -var << ")";
     cnf = ss.str();
 }
 
-signal signal::set_one() {
+void signal::set_one() {
     ostringstream ss;
     ss << cnf << "(" << var << ")";
     cnf = ss.str();
@@ -37,7 +37,7 @@ signal signal::operator|(signal signal_b) {
     int b = signal_b.var;
     int y = v.var;
     ostringstream ss;
-    ss << cnf << signal_b.cnf << "(" << y << " " << a << " " << b << ")(" << y << " " << -a << ")("
+    ss << cnf << signal_b.cnf << "(" << -y << " " << a << " " << b << ")(" << y << " " << -a << ")("
        << y << " " << -b << ")";
     v.cnf = ss.str();
     return v;
@@ -49,8 +49,8 @@ signal signal::operator&(signal signal_b) {
     int b = signal_b.var;
     int y = v.var;
     ostringstream ss;
-    ss << cnf << signal_b.cnf << "(" << -y << " " << -a << " " << -b << ")(" << y << " " << a
-       << ")(" << y << " " << b << ")";
+    ss << cnf << signal_b.cnf << "(" << y << " " << -a << " " << -b << ")(" << -y << " " << a
+       << ")(" << -y << " " << b << ")";
     v.cnf = ss.str();
     return v;
 }

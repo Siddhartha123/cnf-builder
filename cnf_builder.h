@@ -13,8 +13,8 @@ class signal {
 
     signal();
     // signal(bool create_var);
-    signal set_zero();
-    signal set_one();
+    void set_zero();
+    void set_one();
     signal operator~();
     signal operator|(signal signal_b);
     signal operator&(signal signal_b);
