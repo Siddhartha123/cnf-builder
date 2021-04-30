@@ -1,5 +1,9 @@
 #ifndef CNF_BUILDER_H
 #define CNF_BUILDER_H
+#include <stdlib.h>
+
+#include <fstream>
+#include <iostream>
 #include <iterator>
 #include <set>
 #include <sstream>
@@ -7,11 +11,14 @@
 
 using namespace std;
 
+typedef set<int> clause;
+typedef set<clause> CNF;
+
 class signal {
    public:
     static int var_cnt;
     int var;
-    set<string> cnf;
+    CNF formula;
 
     signal();
     void set_zero();
@@ -21,6 +28,8 @@ class signal {
     signal operator&(signal signal_b);
     signal operator^(signal signal_b);
     void print();
-    // void sat_solve();
 };
+
+void sat_solve(CNF formula, int var_cnt, string filename);
+
 #endif
