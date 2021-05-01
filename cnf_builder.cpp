@@ -83,3 +83,65 @@ void sat_solve(CNF formula, int var_cnt, string filename) {
     ss << "minisat_static " << filename << " " << filename << ".out";
     system(ss.str().c_str());
 }
+
+signal signal::cofactor(int x, int flag) {
+    signal f_x;
+    clause c;
+    bool zero, one = false;
+    set<int> single_literals;
+
+    int loi = x * flag;
+    for (CNF::iterator i = formula.begin(); i != formula.end(); i++) {
+        c = *i;
+        // if c is present in x.formula then ignore c
+        // if (x.formula.find(c) != x.formula.end()) continue;
+
+        // replace var with f_x.var
+        if (c.find(var) != c.end()) {
+            c.erase(c.find(var));
+            c.insert(f_x.var);
+        } else if (c.find(-var) != c.end()) {
+            c.erase(c.find(-var));
+            c.insert(-f_x.var);
+        }
+
+        // if c contains loi then ignore c
+        if (c.find(loi) != c.end()) continue;
+
+        if (c.find(-loi) != c.end()) {
+            c.erase(c.find(-loi));
+            if (c.empty()) zero = true;
+        }
+        // if c contains x.var, and flag==-1 then form a new clause with all literals of c except
+        // x.var if c contains -x.var, and flag==1 then form a new clause with all literals of c
+        // except -x.var
+
+        if (c.size() == 1) {
+            if (*(c.begin()) == f_x.var) {
+                one = true;
+                break;
+            } else if (*(c.begin()) == -f_x.var) {
+                zero = true;
+                break;
+            }
+            single_literals.insert(*(c.begin()));
+        }
+        if (!c.empty()) f_x.formula.insert(c);
+    }
+
+    if (zero) {
+        f_x.formula.clear();
+        f_x.set_zero();
+        return f_x;
+    }
+    if (one) {
+        f_x.formula.clear();
+        f_x.set_one();
+        return f_x;
+    }
+    if (single_literals.size() == 0) return f_x;
+
+    loi = *(single_literals.begin());
+    int f = loi / abs(loi);
+    return f_x.cofactor(loi, f);
+}

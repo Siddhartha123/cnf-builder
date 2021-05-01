@@ -27,6 +27,7 @@ class signal {
     signal operator|(signal signal_b);
     signal operator&(signal signal_b);
     signal operator^(signal signal_b);
+    signal cofactor(int x, int flag);
     void print();
 };
 
